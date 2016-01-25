@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<library>
+	<author id="auth1" verified="yes" sex="M">
+		<name>Auth1</name>
+		<book_ref isbn="book1"/>
+		<book_ref isbn="book2"/>
+	</author>
+	<author id="auth2" verified="yes" sex="F">
+		<name>Auth1</name>
+		<book_ref isbn="book1"/>
+		<book_ref isbn="book2"/>
+	</author>
+	<author id="auth1" verified="yes" sex="M">
+		<name>Auth2</name>
+		<book_ref isbn="book1"/>
+		<book_ref isbn="book2"/>
+	</author>
+	<author id="auth2" verified="yes" sex="F">
+		<name>Auth1</name>
+		<book_ref isbn="book1"/>
+		<book_ref isbn="book2"/>
+	</author>
+
+
+</library>
