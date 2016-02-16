@@ -28,6 +28,22 @@ public class Vecteur {
 		return new Vecteur(resultat);
 	}
 	
+	public static Vecteur prodTransMatrice(Matrice mat, Vecteur vector){
+		float vectTab[] = vector.tab; 
+		float []resultat = new float[vectTab.length];
+		float []mC = mat.getMC();
+		int []mI = mat.getMI();// mC et mI 
+		int []mL = mat.getML();
+		
+		for (int j=1, i=0, ind=0; j<mL.length; i++, j++){
+			for(int k=mL[i]; k<mL[j]; k++, ind++) {
+				resultat[mI[ind]] += mC[k]*vectTab[i];
+			}
+		}
+		System.out.println();
+		return new Vecteur(resultat);
+	}
+	
 	public static void displayVector( Vecteur v) {
 		System.out.print("[ ");
 		for (float e: v.tab)
