@@ -1,63 +1,150 @@
 package tp1;
 
-import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Vector;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
+import javax.xml.stream.XMLStreamException;
+
+import matrices.Matrice;
+import matrices.Vecteur;
+
+import org.jdom2.JDOMException;
+
+import edu.jhu.nlp.wikipedia.PageCallbackHandler;
+import edu.jhu.nlp.wikipedia.WikiPage;
+import edu.jhu.nlp.wikipedia.WikiXMLParser;
+import edu.jhu.nlp.wikipedia.WikiXMLParserFactory;
 
 public class Parse {
-	private Page page;
+	private static Dictionnaire dico ;
+	private static HashMap< String, LinkedList<String>> assocMotPage;
+	private static HashMap<Integer, Vector<String>> idLinks;
+	private static HashMap<Integer, String> idPage;
+	private static Vecteur vecteur;
+	private Matrice matrice;
 	
-	public Parse(String url){
-		page = new Page();
-		ParseDoc(url);
+	
+	public Parse(String url) throws XMLStreamException, JDOMException, IOException{
+		assocMotPage = new HashMap<String, LinkedList<String>>();
+		idPage = new HashMap<Integer, String>();
+		idLinks = new HashMap<Integer, Vector<String>>();
+		System.out.println("Loading ...");
 		
-	}
-	public void ParseDoc(String url){
-		
-		try {
-			
-			File input = new File(url);
-			SAXBuilder saxBuilder = new SAXBuilder();
-			Document doc = saxBuilder.build(input);
-			Element rootElement = doc.getRootElement();
-			
-			List<Element> libraryList= rootElement.getChildren();
-			LinkedList<Page> pageList = new LinkedList();
-			
-			
-			int j = 0;
-			for(int i=0; i < libraryList.size(); i++ ){
-				
-				Element libraryChild = libraryList.get(i);
-				page.setTitre(libraryChild.getChildText("titre"));
-				page.setContenu(libraryChild.getChildText("contenu"));
-				page.setId(j);
-				pageList.add(page);
-				j++;
-			}
-			
-			System.out.println(pageList.size());
-			
-			for(int i=0; i < pageList.size(); i++){
-				Page pagePrint = pageList.get(i);
-				pagePrint.printId();
-				pagePrint.printTitre();
-				pagePrint.printContenu();
-				
-			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
+		dico = new Dictionnaire("https://fr.wiktionary.org/wiki/Wiktionnaire:10000-wp-fr-10000");
+
+		parseDocWikiStax(url);
 		
 	}
 	
-	public static void main(String args[]){
-		Parse parse = new Parse("pagetest.xml");
+	int ind1 = 0;
+	int ii = 0;
+	int curPageId = 0;
+	int flag = 0;
+	int flagDeb = 0;
+	String tmpTitle;
+	int tmpId;
+	Vector<String> tmpLinks;
+	int nbPages = 0;
+	
+	public void parseDocWikiStax(String url){
+		WikiXMLParser wxsp = WikiXMLParserFactory.getSAXParser(url);
+		float C[] = new float[Matrice.MAX_SIZE];
+		int L[] = new int[Matrice.MAX_SIZE];
+	    try {
+	        wxsp.setPageCallback(new PageCallbackHandler() { 
+	             public void process(WikiPage  page) {
+	            	 if(page.isRedirect() ||page.isSpecialPage() || page.isStub()){
+	            		//System.out.println("<<<<<<<<<<<  Page anormale ....");
+	            		 return;
+	            	 }
+	            	 curPageId = ii++;
+	            	 tmpTitle = page.getTitle();
+	            	 if(! idPage.values().contains(tmpTitle)){
+	            		 idPage.put((curPageId), tmpTitle);
+	            	 }
+	            	 
+	            	 tmpLinks = page.getLinks();
+	            	 for(String links : tmpLinks){
+	            		 if(! idPage.values().contains(links)){
+	            			 tmpId = ii++;
+		            		 idPage.put((tmpId), links);
+		            	 } 
+	            		 C[flag++] = (float) (1.0 / (float)tmpLinks.size()); 
+	            	 }
+	            	 float cpt = 0;
+	         	     for(int i=flagDeb; i<flag && C[i]!=0;i++){
+	         	    	System.out.print(C[i]+", ");
+	         	    	cpt += C[i];
+	         	    }
+	         	    System.out.println("\n<<>"+cpt);
+	         	    
+	            	 L[ind1] = flagDeb ;
+	            	 L[ind1++] = flag ;
+	            	 flagDeb = flag ;
+	            	 
+	            	 /* association mot page (à revoir) */
+	            	 fillMotPageRelation(Clean.removePunctuation(page.getWikiText()), tmpTitle, assocMotPage);
+	            	 
+	            	 idLinks.put(tmpId, tmpLinks);
+	            	 nbPages ++;
+	             }
+	        });
+	       wxsp.parse();
+	    }catch(Exception e) {
+	            e.printStackTrace();
+	    }
+	    matrice = new Matrice(C, L, null);
+	    vecteur = new Vecteur(nbPages);
+	    /**
+	     * Ici commencer
+	     */
+	}
+	
+	/**
+	 * 
+	 * @param page une page wikipedia
+	 * @param assocMP relation mot page
+	 * 
+	 */
+	public static void fillMotPageRelation(String pageWords[], String titre, HashMap<String, LinkedList<String>> assocMP){
+		//String pageWords[] = Clean.removePunctuation(page.getContenu());
+	    /*
+	     * Pour chaque mot de la page
+	     * on verifie s'il existe dans le dictionnaire
+	     * algo de recherche dichotomique 
+	     */
+	    for(String word : pageWords){
+	    	//System.out.println(word);
+	    	if( Clean.recherche(word, dico.getWordList())){
+	    		//System.out.println("Find "+word+" ---> "+page.getTitre());
+	    		if(assocMP.get(word) == null){// 
+	    			assocMP.put(word, new LinkedList<String>());
+	    		}
+	    		else{
+	    			assocMP.get(word).add(titre);
+	    		}
+	    	}
+	    }
+	}
+
+	public static String displayDate(){
+		Date aujourdhui = new Date();
+		DateFormat mediumDateFormat = DateFormat.getDateTimeInstance(
+		DateFormat.MEDIUM,
+		DateFormat.MEDIUM);
+		System.out.println(mediumDateFormat.format(aujourdhui));
+		return mediumDateFormat.format(aujourdhui);
+	}
+	@SuppressWarnings("unused")
+	public static void main(String args[]) throws XMLStreamException, JDOMException, IOException{
+		String deb = displayDate();
+		 Parse parse = new Parse("test.xml");
+		
+		//Parse parse = new Parse("/Users/Sacko/Documents/Master/Master_2/Semestre_2/MAIN/MesTPS/frwiki.xml");
+		System.out.println("deb : "+deb+", fin : "+displayDate());
 	}
 }

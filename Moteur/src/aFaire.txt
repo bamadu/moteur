@@ -1,0 +1,8 @@
+-- Produit de Matrice sous forme de CLI par un vecteur(*****fait)
+-- relation mot page
+-- Tenir compte des pages qui se repetent 'redirect'(** fait )
+-- recuperer le dictionnaire en local
+-- préciser les frequences des mots dans une page "pas important à ce qu'il paraît :X)"
+-- tenir compte des pages qui se repètent
+
+-- Revoir la méthode Clean.removePunctuation(..)

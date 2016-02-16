@@ -1,15 +1,17 @@
 package tp1;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+
 
 public class Page {
 	
-	private String titre;
-	private String contenu;
+	private String titre="";
+	private String contenu="";
 	private int id;
+	private LinkedList<String > links;
 	
 	public Page(){
-		
+		setLinks(new LinkedList<String>());
 	}
 	
 	public void setTitre(String titre){
@@ -24,15 +26,23 @@ public class Page {
 		this.id = id;
 	}
 	
-	public String printTitre(){
+	public String getTitre(){
 		return titre;
 	}
 	
-	public String printContenu(){
+	public String getContenu(){
 		return contenu;
 	}
 	
-	public int printId(){
+	public int getId(){
 		return id;
+	}
+
+	public LinkedList<String > getLinks() {
+		return links;
+	}
+
+	public void setLinks(LinkedList<String > links) {
+		this.links = links;
 	}
 }
