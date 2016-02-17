@@ -1,4 +1,4 @@
-package tp1;
+package maain.models;
 
 import java.util.LinkedList;
 

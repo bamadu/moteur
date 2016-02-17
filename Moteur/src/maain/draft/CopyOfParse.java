@@ -1,4 +1,4 @@
-package tp1;
+package maain.draft;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,9 +25,11 @@ import edu.jhu.nlp.wikipedia.PageCallbackHandler;
 import edu.jhu.nlp.wikipedia.WikiPage;
 import edu.jhu.nlp.wikipedia.WikiXMLParser;
 import edu.jhu.nlp.wikipedia.WikiXMLParserFactory;
+import maain.models.Page;
+import maain.utils.Utils;
 
 public class CopyOfParse {
-	private static Dictionnaire dico ;
+	private static CopyOfDictionnaire dico ;
 	private static HashMap< String, LinkedList<String>> assocMotPage;
 	private static HashMap<Integer, Vector<String>> idLinks;
 	private static HashMap<Integer, String> idPage;
@@ -39,7 +41,7 @@ public class CopyOfParse {
 		idPage = new HashMap<Integer, String>();
 		System.out.println("Loading ...");
 		
-		dico = new Dictionnaire("https://fr.wiktionary.org/wiki/Wiktionnaire:10000-wp-fr-10000");
+		dico = new CopyOfDictionnaire("https://fr.wiktionary.org/wiki/Wiktionnaire:10000-wp-fr-10000");
 		//parseDoc(url);
 		//parseDocStax(url);
 		parseDocWikiStax(url);
@@ -167,7 +169,7 @@ public class CopyOfParse {
 	    idPage.put(ieme++, titre); // On associe la page à son identité
 	    page.setTitre(titre);
 	    page.setContenu(contenuText);// texte non nettoyé
-	    String pageWords[] = Clean.removePunctuation(page.getContenu());
+	    String pageWords[] = Utils.removePunctuation(page.getContenu());
 	    fillMotPageRelation(pageWords, titre, assocMotPage);
 	}
 	/**
@@ -185,7 +187,7 @@ public class CopyOfParse {
 	     */
 	    for(String word : pageWords){
 	    	//System.out.println(word);
-	    	if( Clean.recherche(word, dico.getWordList())){
+	    	if( Utils.recherche(word, dico.getWordList())){
 	    		//System.out.println("Find "+word+" ---> "+page.getTitre());
 	    		if(assocMP.get(word) == null){// 
 	    			assocMP.put(word, new LinkedList<String>());

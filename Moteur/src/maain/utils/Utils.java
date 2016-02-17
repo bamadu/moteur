@@ -1,6 +1,10 @@
-package tp1;
+package maain.utils;
 
-public class Clean {
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.List;
+
+public class Utils {
 	
 	public static String[] removePunctuation(String text){
 		//String[] res = (text.replaceAll("[^a-zA-Z0-9\\s]|[dl]'", " ").toLowerCase()).split("\\s+");
@@ -26,6 +30,7 @@ public class Clean {
 		}
 		return match;
 	}
+	
 	/*public static void main(String args[]){
 		String[] dic = new String[8];
 		String text = "H*#*#)#fhdfdfjdf[\\]~323i4i90>>>....,`344 l'''d' we+-@wqe h'heue l'homme d'academie";
@@ -52,5 +57,20 @@ public class Clean {
 				return true;
 		}
 		return false;
+	}
+	
+	public static boolean recherche(String word, List<String> wordList) {
+		for (String w: wordList) 
+			if(word.equalsIgnoreCase(w))
+					return true;
+		return false;
+	}
+	public static String displayDate(){
+		Date aujourdhui = new Date();
+		DateFormat mediumDateFormat = DateFormat.getDateTimeInstance(
+		DateFormat.MEDIUM,
+		DateFormat.MEDIUM);
+		System.out.println(mediumDateFormat.format(aujourdhui));
+		return mediumDateFormat.format(aujourdhui);
 	}
 }

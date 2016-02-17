@@ -1,4 +1,4 @@
-package matrices;
+package maain.models;
 
 public class Matrice {
 	private int m;

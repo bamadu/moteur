@@ -1,4 +1,4 @@
-package tp1;
+package maain.draft;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,8 +28,8 @@ public class bidul {
 	         List<Element> studentList = classElement.getChildren();
 	         System.out.println("----------------------------");
 
-	         for (int temp = 0; temp < studentList.size(); temp++) {    
-	            Element student = studentList.get(temp);
+	         for (Element student: studentList)
+	         {    
 	            System.out.println("\nCurrent Element :" 
 	               + student.getName());
 	            Attribute attribute =  student.getAttribute("rollno");

@@ -1,7 +1,8 @@
-package tp1;
+package maain.tp1;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,15 +10,16 @@ import java.util.Vector;
 
 import javax.xml.stream.XMLStreamException;
 
-import matrices.Matrice;
-import matrices.Vecteur;
-
 import org.jdom2.JDOMException;
 
 import edu.jhu.nlp.wikipedia.PageCallbackHandler;
 import edu.jhu.nlp.wikipedia.WikiPage;
 import edu.jhu.nlp.wikipedia.WikiXMLParser;
 import edu.jhu.nlp.wikipedia.WikiXMLParserFactory;
+import maain.models.Dictionnaire;
+import maain.models.Matrice;
+import maain.models.Vecteur;
+import maain.utils.Utils;
 
 public class Parse {
 	private static Dictionnaire dico ;
@@ -34,8 +36,8 @@ public class Parse {
 		idLinks = new HashMap<Integer, Vector<String>>();
 		System.out.println("Loading ...");
 		
-		dico = new Dictionnaire("https://fr.wiktionary.org/wiki/Wiktionnaire:10000-wp-fr-10000");
-
+		//dico = new Dictionnaire("https://fr.wiktionary.org/wiki/Wiktionnaire:10000-wp-fr-10000");
+		dico = new Dictionnaire(1);
 		parseDocWikiStax(url);
 		
 	}
@@ -87,7 +89,7 @@ public class Parse {
 	            	 flagDeb = flag ;
 	            	 
 	            	 /* association mot page (à revoir) */
-	            	 fillMotPageRelation(Clean.removePunctuation(page.getWikiText()), tmpTitle, assocMotPage);
+	            	 fillMotPageRelation(Utils.removePunctuation(page.getWikiText()), tmpTitle, assocMotPage);
 	            	 
 	            	 idLinks.put(tmpId, tmpLinks);
 	            	 nbPages ++;
@@ -119,7 +121,8 @@ public class Parse {
 	     */
 	    for(String word : pageWords){
 	    	//System.out.println(word);
-	    	if( Clean.recherche(word, dico.getWordList())){
+	    	//if( Clean.recherche(word, dico.getWordList())){
+	    	if( Utils.recherche(word, dico.getSortDataFinal())){
 	    		//System.out.println("Find "+word+" ---> "+page.getTitre());
 	    		if(assocMP.get(word) == null){// 
 	    			assocMP.put(word, new LinkedList<String>());
@@ -131,20 +134,9 @@ public class Parse {
 	    }
 	}
 
-	public static String displayDate(){
-		Date aujourdhui = new Date();
-		DateFormat mediumDateFormat = DateFormat.getDateTimeInstance(
-		DateFormat.MEDIUM,
-		DateFormat.MEDIUM);
-		System.out.println(mediumDateFormat.format(aujourdhui));
-		return mediumDateFormat.format(aujourdhui);
-	}
+	
 	@SuppressWarnings("unused")
 	public static void main(String args[]) throws XMLStreamException, JDOMException, IOException{
-		String deb = displayDate();
-		 Parse parse = new Parse("test.xml");
 		
-		//Parse parse = new Parse("/Users/Sacko/Documents/Master/Master_2/Semestre_2/MAIN/MesTPS/frwiki.xml");
-		System.out.println("deb : "+deb+", fin : "+displayDate());
 	}
 }

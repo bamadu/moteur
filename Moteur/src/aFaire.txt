@@ -6,3 +6,14 @@
 -- tenir compte des pages qui se repètent
 
 -- Revoir la méthode Clean.removePunctuation(..)
+
+
+
+
+************** Lib nécessaire à l'execution ****************
+$ 1. bzip2.jar
+$ 2. commons-lang3-3.4jar // apache StringUtils entre autre
+$ 3. jdom-2.0.6.jar
+$ 4. jsoup-1.8.3.jar
+$ 5.wikixmlj-r43.jar
+************************************************************
