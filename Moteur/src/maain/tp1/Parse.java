@@ -79,7 +79,7 @@ public class Parse {
 	            	 }
 	            	 float cpt = 0;
 	         	     for(int i=flagDeb; i<flag && C[i]!=0;i++){
-	         	    	System.out.print(C[i]+", ");
+	         	    	//System.out.print(C[i]+", ");
 	         	    	cpt += C[i];
 	         	    }
 	         	    System.out.println("\n<<>"+cpt);
