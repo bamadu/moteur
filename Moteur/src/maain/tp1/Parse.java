@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -37,27 +38,33 @@ public class Parse {
 		System.out.println("Loading ...");
 		
 		//dico = new Dictionnaire("https://fr.wiktionary.org/wiki/Wiktionnaire:10000-wp-fr-10000");
-		dico = new Dictionnaire(1);
+		/**
+		 * get words from the first wikipedia's link, for test
+		 * do not forget to set the parameter to 10 after ...
+		 */
+		dico = new Dictionnaire(1); //  
 		parseDocWikiStax(url);
 		
 	}
-	
-	int ind1 = 0;
-	int ii = 0;
-	int curPageId = 0;
-	int flag = 0;
-	int flagDeb = 0;
-	String tmpTitle;
-	int tmpId;
-	Vector<String> tmpLinks;
-	int nbPages = 0;
-	
+	int nb_pages = 0;
 	public void parseDocWikiStax(String url){
+		long startTime = System.nanoTime();
+    	
+		
 		WikiXMLParser wxsp = WikiXMLParserFactory.getSAXParser(url);
 		float C[] = new float[Matrice.MAX_SIZE];
 		int L[] = new int[Matrice.MAX_SIZE];
 	    try {
 	        wxsp.setPageCallback(new PageCallbackHandler() { 
+	        	int ind1 = 0;
+	    		int ii = 0;
+	    		int curPageId = 0;
+	    		int flag = 0;
+	    		int flagDeb = 0;
+	    		String tmpTitle;
+	    		int tmpId;
+	    		Vector<String> tmpLinks;
+	    		int nbPages = 0;
 	             public void process(WikiPage  page) {
 	            	 if(page.isRedirect() ||page.isSpecialPage() || page.isStub()){
 	            		//System.out.println("<<<<<<<<<<<  Page anormale ....");
@@ -82,7 +89,7 @@ public class Parse {
 	         	    	//System.out.print(C[i]+", ");
 	         	    	cpt += C[i];
 	         	    }
-	         	    System.out.println("\n<<>"+cpt);
+	         	    //System.out.println("\n<<>"+cpt);
 	         	    
 	            	 L[ind1] = flagDeb ;
 	            	 L[ind1++] = flag ;
@@ -93,6 +100,13 @@ public class Parse {
 	            	 
 	            	 idLinks.put(tmpId, tmpLinks);
 	            	 nbPages ++;
+	            	 if (nbPages%1000 == 0) {
+	            		 long endTime = System.nanoTime();
+	            	     long elapsedTimeInMillis = TimeUnit.MILLISECONDS.convert((endTime - startTime), TimeUnit.SECONDS);
+	            		
+	            		 System.out.println("Nombres Pages "+nbPages+" Time: "+elapsedTimeInMillis);
+	            	 }
+	            	 nb_pages = nbPages;
 	             }
 	        });
 	       wxsp.parse();
@@ -100,7 +114,7 @@ public class Parse {
 	            e.printStackTrace();
 	    }
 	    matrice = new Matrice(C, L, null);
-	    vecteur = new Vecteur(nbPages);
+	    vecteur = new Vecteur(nb_pages);
 	    /**
 	     * Ici commencer
 	     */

@@ -36,7 +36,7 @@ public class App {
 		//Parse parse = new Parse("/Users/Sacko/Documents/Master/Master_2/Semestre_2/MAIN/MesTPS/frwiki.xml");
 		//System.out.println("deb : "+deb+", fin : "+Utils.displayDate());
 		 long endTime = System.nanoTime();
-	     long elapsedTimeInMillis = TimeUnit.MILLISECONDS.convert((endTime - startTime), TimeUnit.SECONDS);
+	     long elapsedTimeInMillis = TimeUnit.NANOSECONDS.convert((endTime - startTime), TimeUnit.SECONDS);
 	     System.out.println("Total elapsed time: " + elapsedTimeInMillis + " ms");
 	}
 
