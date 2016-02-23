@@ -11,13 +11,27 @@ import org.jdom2.JDOMException;
 import maain.utils.Utils;
 
 public class App {
+	
+	private String path;
+	
+	public App() {
+		path = getClass().getResource("test.xml").toString();
+	}
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		//App app = new App();
 		long startTime = System.nanoTime();
 		//String deb = Utils.displayDate();
 		 try {
-			 String path = new File("").getAbsolutePath()+"/../../../m2-lp/maain-m2/frwiki.xml";
+			 String path = "test.xml";
 			Parse parse = new Parse(path);
 		} catch (XMLStreamException e) {
 			// TODO Auto-generated catch block
@@ -36,8 +50,8 @@ public class App {
 		//Parse parse = new Parse("/Users/Sacko/Documents/Master/Master_2/Semestre_2/MAIN/MesTPS/frwiki.xml");
 		//System.out.println("deb : "+deb+", fin : "+Utils.displayDate());
 		 long endTime = System.nanoTime();
-	     long elapsedTimeInMillis = TimeUnit.NANOSECONDS.convert((endTime - startTime), TimeUnit.SECONDS);
-	     System.out.println("Total elapsed time: " + elapsedTimeInMillis + " ms");
+	     long elapsedTimeInMillis = TimeUnit.SECONDS.convert((endTime - startTime), TimeUnit.NANOSECONDS);
+	     System.out.println("Total elapsed time: " + elapsedTimeInMillis + " s");
 	}
 
 }

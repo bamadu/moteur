@@ -17,3 +17,4 @@ $ 3. jdom-2.0.6.jar
 $ 4. jsoup-1.8.3.jar
 $ 5.wikixmlj-r43.jar
 ************************************************************
+links : differencier Liens externes de liens internes dans le fichier XML

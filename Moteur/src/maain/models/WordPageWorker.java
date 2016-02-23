@@ -7,7 +7,7 @@ public class WordPageWorker extends RecursiveAction {
 	@Override
 	protected void compute() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 }

@@ -8,9 +8,24 @@ public class Vecteur {
 		tab = new float[n];
 	}
 	
+	public Vecteur(int n, float value){
+		this.size = n;
+		tab = new float[n];
+		for(int i = 0; i < tab.length; i++)
+			tab[i] = value;
+	}
+	
 	public Vecteur(float []t){
 		tab = t;
 		size = t.length;
+	}
+	
+	public int getSize(){
+		return size;
+	}
+	
+	public float getValue(int i){
+		return tab[i];
 	}
 	
 	public static Vecteur prodMatrice(Matrice mat, Vecteur vector){
