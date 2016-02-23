@@ -1,6 +1,5 @@
 package maain.tp1;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -8,31 +7,20 @@ import javax.xml.stream.XMLStreamException;
 
 import org.jdom2.JDOMException;
 
-import maain.utils.Utils;
-
 public class App {
 	
-	private String path;
+	private static final String path = "test.xml";
 	
-	public App() {
-		path = getClass().getResource("test.xml").toString();
-	}
-	public String getPath() {
-		return path;
-	}
 
-	public void setPath(String path) {
-		this.path = path;
-	}
-
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		//App app = new App();
 		long startTime = System.nanoTime();
 		//String deb = Utils.displayDate();
 		 try {
-			 String path = "test.xml";
-			Parse parse = new Parse(path);
+			MasterThread parse = new MasterThread(path);
+			
 		} catch (XMLStreamException e) {
 			// TODO Auto-generated catch block
 			System.out.println("From XML");

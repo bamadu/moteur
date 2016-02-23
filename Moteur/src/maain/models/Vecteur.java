@@ -1,21 +1,26 @@
 package maain.models;
 
 public class Vecteur {
-	float tab[];
+	double tab[];
 	int size;
 	public Vecteur(int n){
 		this.size = n;
-		tab = new float[n];
+		tab = new double[n];
 	}
 	
-	public Vecteur(int n, float value){
+	public double[]getTab(){
+		return tab;
+	}
+	
+	
+	public Vecteur(int n, double value){
 		this.size = n;
-		tab = new float[n];
+		tab = new double[n];
 		for(int i = 0; i < tab.length; i++)
 			tab[i] = value;
 	}
 	
-	public Vecteur(float []t){
+	public Vecteur(double []t){
 		tab = t;
 		size = t.length;
 	}
@@ -24,14 +29,14 @@ public class Vecteur {
 		return size;
 	}
 	
-	public float getValue(int i){
+	public double getValue(int i){
 		return tab[i];
 	}
 	
 	public static Vecteur prodMatrice(Matrice mat, Vecteur vector){
-		float vectTab[] = vector.tab; 
-		float []resultat = new float[vectTab.length];
-		float []mC = mat.getMC();
+		double vectTab[] = vector.tab; 
+		double []resultat = new double[vectTab.length];
+		double []mC = mat.getMC();
 		int []mI = mat.getMI();// mC et mI 
 		int []mL = mat.getML();
 		
@@ -44,9 +49,9 @@ public class Vecteur {
 	}
 	
 	public static Vecteur prodTransMatrice(Matrice mat, Vecteur vector){
-		float vectTab[] = vector.tab; 
-		float []resultat = new float[vectTab.length];
-		float []mC = mat.getMC();
+		double vectTab[] = vector.tab; 
+		double []resultat = new double[vectTab.length];
+		double []mC = mat.getMC();
 		int []mI = mat.getMI();// mC et mI 
 		int []mL = mat.getML();
 		
@@ -59,22 +64,26 @@ public class Vecteur {
 		return new Vecteur(resultat);
 	}
 	
-	public static void displayVector( Vecteur v) {
+	public static void displayVector( Vecteur v, int size) {
 		System.out.print("[ ");
-		for (float e: v.tab)
+		int i =0;
+		for (double e: v.tab){
 			System.out.print(e+" ");
+			if((++i) == size+20)
+				break;
+		}
 		System.out.println(" ]");
 	}
 	
 	public static void main(String[] args) {
-		float []v = {2, 5, 7, 8};
-		float []mC = {1, 2, 3, 4, 5, 6};
+		double []v = {2, 5, 7, 8};
+		double []mC = {1, 2, 3, 4, 5, 6};
 		int []mI = {0, 3, 1, 2, 3, 0}; 
 		int []mL = {0, 2, 2, 5, 6};
 		Matrice m = new Matrice(mC, mL, mI);
 		
 		Vecteur vec = prodMatrice(m, new Vecteur(v));
-		displayVector(vec);
+		displayVector(vec, v.length);
 	}
 
 }

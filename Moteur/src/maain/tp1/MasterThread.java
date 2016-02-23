@@ -9,6 +9,7 @@ import javax.xml.stream.XMLStreamException;
 
 import maain.models.Dictionnaire;
 import maain.models.Matrice;
+import maain.models.PageHandler;
 import maain.models.Vecteur;
 import maain.utils.Utils;
 
@@ -19,17 +20,15 @@ import edu.jhu.nlp.wikipedia.WikiPage;
 import edu.jhu.nlp.wikipedia.WikiXMLParser;
 import edu.jhu.nlp.wikipedia.WikiXMLParserFactory;
 
-public class Parse {
+public class MasterThread implements PageHandler {
 	private static Dictionnaire dico ;
 	private static HashMap< String, LinkedList<String>> assocMotPage;
 	private static HashMap<Integer, Vector<String>> idLinks;
 	private static HashMap<String, Integer> idPage;
 	private static Vecteur vecteur;
 	private Matrice matrice;
-	public static final float epsilon = 1/1000;
 	
-	
-	public Parse(String url) throws XMLStreamException, JDOMException, IOException{
+	public MasterThread(String url) throws XMLStreamException, JDOMException, IOException{
 		assocMotPage = new HashMap<String, LinkedList<String>>();
 		idPage = new HashMap<String, Integer>();
 		idLinks = new HashMap<Integer, Vector<String>>();
@@ -48,7 +47,7 @@ public class Parse {
 	int nbPages = 0;
 	public void parseDocWikiStax(String url){
 		WikiXMLParser wxsp = WikiXMLParserFactory.getSAXParser(url);
-		float C[] = new float[Matrice.MAX_SIZE];
+		double C[] = new double[Matrice.MAX_SIZE];
 		int L[] = new int[Matrice.MAX_SIZE];
 		int I[] = new int[Matrice.MAX_SIZE];
 	    try {
@@ -61,8 +60,9 @@ public class Parse {
 	    		String tmpTitle;
 	    		int tmpId;
 	    		Vector<String> tmpLinks;
-	    		int col = 0;
+	    		
 	             public void process(WikiPage  page) {
+	            	 System.out.println("Id : "+Thread.currentThread().getId());
 	            	 if(page.isRedirect() ||page.isSpecialPage() || page.isStub()){
 	            		//System.out.println("<<<<<<<<<<<  Page anormale ....");
 	            		 return;
@@ -82,11 +82,11 @@ public class Parse {
 	            			 tmpId = ii++;
 		            		 idPage.put(links, tmpId);
 		            	 } 
-	            		 C[flag++] = (float) (1.0 / (float)tmpLinks.size()); 
-	            		 I[col++] = idPage.get(links); 
+	            		 C[flag] = (double) (1.0 / (double)tmpLinks.size()); 
+	            		 I[flag++] = idPage.get(links); 
 	            		 
 	            	 }
-	            	 /*float cpt = 0;
+	            	 /*double cpt = 0;
 	         	     for(int i=flagDeb; i<flag && C[i]!=0;i++){
 	         	    	System.out.print(C[i]+", ");
 	         	    	cpt += C[i];
@@ -94,9 +94,9 @@ public class Parse {
 	         	    System.out.println("\n<<>"+cpt);*/
 	         	    
 	            	 L[ind1] = flagDeb ;
-	            	 L[ind1++] = flag ;
+	            	 L[ind1+1] = flag ;
+	            	 ind1++;
 	            	 flagDeb = flag ;
-	            	 
 	            	 /* association mot page (à revoir) */
 	            	 fillMotPageRelation(Utils.removePunctuation(page.getWikiText()), tmpTitle, assocMotPage);
 	            	 idLinks.put(tmpId, tmpLinks);
@@ -107,38 +107,22 @@ public class Parse {
 	    }catch(Exception e) {
 	            e.printStackTrace();
 	    }
+	    
 	    matrice = new Matrice(C, L, I);
-	    vecteur = new Vecteur(Matrice.MAX_SIZE, 1/nbPages); // nbPages nombre de noeuds 
-	    Vecteur vectResultat = calculatePageRank(matrice, vecteur);
-	    Vecteur.displayVector(vectResultat);
+	    /*for(int i=0; i<matrice.getMC().length && matrice.getMC()[i]!=0;i++){
+ 	    	System.out.print(matrice.getMC()[i]+", ");
+ 	    }*/
+ 	    System.out.println("\n nbPage : "+nbPages+", 1/nbPages : "+ (1.0/nbPages));
+ 	    /**
+	     * Ici commencer le produit
+	     */
+	    vecteur = new Vecteur(Matrice.MAX_SIZE, (double) (1.0/nbPages)); // nbPages nombre de noeuds 
+	    Vecteur vectResultat = Utils.calculatePageRank(matrice, vecteur);
+	    Vecteur.displayVector(vectResultat, nbPages);
 	    /**
 	     * Ici commencer le produit
 	     */
 	}
-	
-	
-	public static Vecteur calculatePageRank(Matrice m, Vecteur v){
-		Vecteur Po = v;
-		Vecteur Pk;
-		float gama = 0;
-		do{
-			Pk = Vecteur.prodTransMatrice(m, Po);
-			gama = norme(Pk,Po);
-			Po = Pk;
-		}
-		while(gama < epsilon);
-		return Pk;
-	}
-	
-	private static float norme(Vecteur pk, Vecteur po) {
-		// TODO Auto-generated method stub
-		float res = 0;
-		for(int i = 0; i < pk.getSize(); i++){
-			res += Math.pow(Math.abs(pk.getValue(i) - po.getValue(i)), 2);
-		}
-		return (float) Math.sqrt(res);
-	}
-	
 	
 	/**
 	 * 
@@ -154,10 +138,7 @@ public class Parse {
 	     * algo de recherche dichotomique 
 	     */
 	    for(String word : pageWords){
-	    	//System.out.println(word);
-	    	//if( Clean.recherche(word, dico.getWordList())){
 	    	if( Utils.recherche(word, dico.getSortDataFinal())){
-	    		//System.out.println("Find "+word+" ---> "+page.getTitre());
 	    		if(assocMP.get(word) == null){// 
 	    			assocMP.put(word, new LinkedList<String>());
 	    		}
@@ -171,6 +152,30 @@ public class Parse {
 	
 	@SuppressWarnings("unused")
 	public static void main(String args[]) throws XMLStreamException, JDOMException, IOException{
+		
+	}
+
+	@Override
+	public void queueLink(WikiPage page) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean visited(WikiPage page) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void addVisited(WikiPage page) {
+		// TODO Auto-generated method stub
 		
 	}
 }

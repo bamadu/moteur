@@ -3,7 +3,7 @@
 -- Tenir compte des pages qui se repetent 'redirect'(** fait )
 -- recuperer le dictionnaire en local
 -- préciser les frequences des mots dans une page "pas important à ce qu'il paraît :X)"
--- tenir compte des pages qui se repètent
+-- tenir compte des pages qui se repèten(*fait)
 
 -- Revoir la méthode Clean.removePunctuation(..)
 
