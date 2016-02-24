@@ -10,7 +10,7 @@ import org.jdom2.JDOMException;
 public class App {
 	
 	//private static final String path = "test.xml";
-	private static final String path = "/Users/Sacko/Documents/Master/Master_2/Semestre_2/MAIN/MesTPS/frwiki.xml";
+	private static final String path = "/Users/seydou/m2-lp/maain-m2/frwiki.xml";
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
@@ -33,6 +33,10 @@ public class App {
 			// TODO Auto-generated catch block
 			System.out.println("Entrée/Sortie");
 			e.printStackTrace();
+		} catch (java.lang.OutOfMemoryError e) {
+			// TODO: handle exception
+			System.out.println("Out Of Memory, NB active Worker "+Thread.activeCount());
+			
 		}
 		
 		//Parse parse = new Parse("/Users/Sacko/Documents/Master/Master_2/Semestre_2/MAIN/MesTPS/frwiki.xml");
