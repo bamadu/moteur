@@ -80,6 +80,17 @@ public class MasterThread implements PageHandler {
 		return id_page++;
 	}
 
+	public synchronized void setCandIParameters(String link, int size) {
+		C[flag] = (double) (1.0 / (double)size);
+		I[flag++] = getIdPage().get(link);
+	}
+	
+	public synchronized void setLParameters() {
+		L[ind1] = flagDeb ;
+		L[ind1+1] = flag ;
+		ind1++;
+		flagDeb = flag ;
+	}
 	/*public void addIdToLink (String link) {
 		if(! idPage.values().contains(links)){
 			 tmpId = id_page++;
@@ -87,7 +98,7 @@ public class MasterThread implements PageHandler {
    	 } 
 	}*/
 	
-	public int updateIdPage(String title)  {
+	public synchronized int updateIdPage(String title)  {
 		int curPageId; 
 		boolean res = idPage.values().contains(title);
 		if(! res){
@@ -116,6 +127,7 @@ public class MasterThread implements PageHandler {
 		dico = new Dictionnaire(1); // 
 		execService = Executors.newFixedThreadPool(maxThreads);
 		parseDocWikiStax(url);
+		execService.shutdownNow();
 		
 	}
 	
@@ -126,7 +138,6 @@ public class MasterThread implements PageHandler {
 	    try {
 	        wxsp.setPageCallback(new PageCallbackHandler() { 
 	        	
-	    		
 	             public void process(WikiPage  page) {
 	            	 //System.out.println("Id : "+Thread.currentThread().getId());
 	            	 /* à remettre dans MasterThread */
@@ -139,8 +150,7 @@ public class MasterThread implements PageHandler {
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
-	         		
+					}	
 	         		
 	         		nbPages ++;
 	             }
@@ -171,14 +181,14 @@ public class MasterThread implements PageHandler {
 	 * @param page une page wikipedia
 	 * @param map relation mot page
 	 * 
-	 */
+	 *
 	public static void fillMotPageRelation(String pageWords[], String titre, Map<String, LinkedList<String>> map){
 		//String pageWords[] = Clean.removePunctuation(page.getContenu());
 	    /*
 	     * Pour chaque mot de la page
 	     * on verifie s'il existe dans le dictionnaire
 	     * algo de recherche dichotomique 
-	     */
+	     *
 	    for(String word : pageWords){
 	    	if( Utils.recherche(word, dico.getSortDataFinal())){
 	    		if(map.get(word) == null){// 
@@ -189,7 +199,7 @@ public class MasterThread implements PageHandler {
 	    		}
 	    	}
 	    }
-	}
+	}*/
 	
 	private void startNewThread(WikiPage page) throws Exception {
         execService.execute(new PageWorker(page, this));
@@ -204,13 +214,13 @@ public class MasterThread implements PageHandler {
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
-		return 0;
+		return idPage.size();
 	}
 
 	@Override
 	public boolean visited(WikiPage page) {
 		// TODO Auto-generated method stub
-		return false;
+		return idPage.containsKey(page.getTitle());
 	}
 
 	@Override
@@ -219,5 +229,10 @@ public class MasterThread implements PageHandler {
 		
 	}
 
+	public Dictionnaire getDico() {
+		return dico;
+	}
+	
+	
 	
 }

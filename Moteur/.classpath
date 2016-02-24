@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="/Users/seydou/java/lib/wikiXmlParser/wikixmlj-r43.jar"/>
 	<classpathentry kind="lib" path="/Users/seydou/java/lib/jdom-2.0.6/jdom-2.0.6.jar"/>
 	<classpathentry kind="lib" path="/Users/seydou/java/lib/wikiXmlParser/bzip2.jar"/>
+	<classpathentry kind="lib" path="/Users/seydou/java/lib/xercesImpl.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

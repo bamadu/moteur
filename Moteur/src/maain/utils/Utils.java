@@ -1,6 +1,7 @@
 package maain.utils;
 
 import java.text.DateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -69,6 +70,15 @@ public class Utils {
 					return true;
 		return false;
 	}
+	
+	public static boolean recherche(String word, Collection<String> wordList) {
+		// TODO Auto-generated method stub
+		for (String w: wordList) 
+			if(word.equalsIgnoreCase(w))
+					return true;
+		return false;
+	}
+	
 	public static String displayDate(){
 		Date aujourdhui = new Date();
 		DateFormat mediumDateFormat = DateFormat.getDateTimeInstance(
@@ -99,6 +109,8 @@ public class Utils {
 		}
 		return res;
 	}
+
+	
 	
 	
 	

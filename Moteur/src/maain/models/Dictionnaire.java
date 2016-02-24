@@ -3,7 +3,9 @@ package maain.models;
 import java.io.IOException;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -152,13 +154,19 @@ public class Dictionnaire
     }
     
     /* --------------------------------------- */
-    private List<String> sortDataFinal = new ArrayList<String>();
-    public List<String> getSortDataFinal() {
+    //private List<String> sortDataFinal = new ArrayList<String>();
+    private Collection<String> sortDataFinal = Collections.synchronizedSet(new HashSet<String>());
+    
+    public Collection<String> getSortDataFinal() {
+		return sortDataFinal;
+	}
+    
+    /*public List<String> getSortDataFinal() {
 		return sortDataFinal;
 	}
 
 	public void setSortDataFinal(List<String> sortDataFinal) {
 		this.sortDataFinal = sortDataFinal;
-	}
+	}*/
 
 }
