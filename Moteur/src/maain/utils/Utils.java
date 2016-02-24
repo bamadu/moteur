@@ -4,7 +4,11 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
+import maain.models.Matrice;
+import maain.models.Vecteur;
+
 public class Utils {
+	public static final double epsilon = 1/1000;
 	
 	public static String[] removePunctuation(String text){
 		//String[] res = (text.replaceAll("[^a-zA-Z0-9\\s]|[dl]'", " ").toLowerCase()).split("\\s+");
@@ -13,12 +17,12 @@ public class Utils {
 		return res;
 	}
 	
-	public static boolean checkDictionnary(String word, String[] dic){
+	public static boolean rechercheDichotomique(String word, String[] dic){
 		int low = 0;
 		int high = (dic.length) - 1;
 		boolean match = false;
 		while (low <= high){
-			int mid = (low + high) / 2;
+			int mid = low + ( high - low) / 2;
 			if(word.compareToIgnoreCase(dic[mid]) == 0){
 				match = true;
 				break;
@@ -73,4 +77,31 @@ public class Utils {
 		System.out.println(mediumDateFormat.format(aujourdhui));
 		return mediumDateFormat.format(aujourdhui);
 	}
+	
+	public static Vecteur calculatePageRank(Matrice m, Vecteur v){
+		Vecteur Po = v;
+		Vecteur Pk;
+		double gama = 0;
+		do{
+			Pk = Vecteur.prodTransMatrice(m, Po);
+			gama = norme(Pk,Po);
+			Po = Pk;
+		}
+		while(gama < epsilon);
+		return Pk;
+	}
+	
+	private static double norme(Vecteur pk, Vecteur po) {
+		// TODO Auto-generated method stub
+		double res = 0;
+		for(int i = 0; i < pk.getSize(); i++){
+			res += Math.abs(pk.getValue(i) - po.getValue(i));
+		}
+		return res;
+	}
+	
+	
+	
+	
+	
 }
