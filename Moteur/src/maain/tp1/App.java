@@ -9,8 +9,8 @@ import org.jdom2.JDOMException;
 
 public class App {
 	
-	private static final String path = "test.xml";
-	
+	//private static final String path = "test.xml";
+	private static final String path = "/Users/Sacko/Documents/Master/Master_2/Semestre_2/MAIN/MesTPS/frwiki.xml";
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
@@ -19,7 +19,7 @@ public class App {
 		long startTime = System.nanoTime();
 		//String deb = Utils.displayDate();
 		 try {
-			MasterThread parse = new MasterThread(path);
+			MasterThread parse = new MasterThread(path, 64);
 			
 		} catch (XMLStreamException e) {
 			// TODO Auto-generated catch block
