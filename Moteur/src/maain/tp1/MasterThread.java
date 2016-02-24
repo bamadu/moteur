@@ -41,7 +41,7 @@ public class MasterThread implements PageHandler {
 	public int flag = 0; // 
 	public int flagDeb = 0;
 	public int ind1 = 0; //
-	
+	public int nbPages = 0;
 	
 	
 	public Map< String, LinkedList<String>> getAssocMotPage() {
@@ -119,7 +119,7 @@ public class MasterThread implements PageHandler {
 		
 	}
 	
-	int nbPages = 0;
+	
 	public void parseDocWikiStax(String url){
 		WikiXMLParser wxsp = WikiXMLParserFactory.getSAXParser(url);
 		
@@ -140,8 +140,6 @@ public class MasterThread implements PageHandler {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-	         		
-	         		
 	         		nbPages ++;
 	             }
 	        });

@@ -59,6 +59,7 @@ public class PageWorker implements Runnable {
 			/* association mot page (à revoir) */
 			MasterThread.fillMotPageRelation(Utils.removePunctuation(page.getWikiText()), tmpTitle, master.getAssocMotPage());
 			master.getIdLinks().put(curPageId, tmpLinks);
+			System.out.println("END OF : "+ Thread.currentThread().getId()+" title Page: "+tmpTitle);
 		}
 
 	}

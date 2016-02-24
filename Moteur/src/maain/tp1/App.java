@@ -19,7 +19,7 @@ public class App {
 		long startTime = System.nanoTime();
 		//String deb = Utils.displayDate();
 		 try {
-			MasterThread parse = new MasterThread(path, 64);
+			MasterThread parse = new MasterThread(path, 128);
 			
 		} catch (XMLStreamException e) {
 			// TODO Auto-generated catch block
