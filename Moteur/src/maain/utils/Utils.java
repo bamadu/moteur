@@ -12,9 +12,9 @@ public class Utils {
 	public static final double epsilon = 1/1000;
 	
 	public static String[] removePunctuation(String text){
-		//String[] res = (text.replaceAll("[^a-zA-Z0-9\\s]|[dl]'", " ").toLowerCase()).split("\\s+");
-		String[] res = new String[1];
-		res[0] = "RIEN";
+		String[] res = (text.replaceAll("[^a-zA-Z0-9\\s]|[dl]'", " ").toLowerCase()).split("\\s+");
+		//String[] res = new String[1];
+		//res[0] = "RIEN";
 		return res;
 	}
 	

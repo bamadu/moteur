@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -25,7 +24,7 @@ import edu.jhu.nlp.wikipedia.WikiPage;
 import edu.jhu.nlp.wikipedia.WikiXMLParser;
 import edu.jhu.nlp.wikipedia.WikiXMLParserFactory;
 
-public class MasterThread implements PageHandler {
+public class MasterThread implements PageHandler, Runnable {
 	private static Dictionnaire dico ;
 	private static Map< String, LinkedList<String>> assocMotPage;
 	private static Map<Integer, Vector<String>> idLinks;
@@ -37,11 +36,21 @@ public class MasterThread implements PageHandler {
 	private static int L[] = new int[Matrice.MAX_SIZE];
 	private static int I[] = new int[Matrice.MAX_SIZE];
 	private ExecutorService execService;
-	 
+	private String url;
 	public int flag = 0; // 
 	public int flagDeb = 0;
 	public int ind1 = 0; //
 	public int nbPages = 0;
+	
+	
+	
+	
+	
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		parseDocWikiStax(url);
+	}
 	
 	
 	public Map< String, LinkedList<String>> getAssocMotPage() {
@@ -110,7 +119,8 @@ public class MasterThread implements PageHandler {
 		return curPageId;
 	}
 	
-	public MasterThread(String url, int maxThreads) throws XMLStreamException, JDOMException, IOException{
+	//public MasterThread(String url, int maxThreads) throws XMLStreamException, JDOMException, IOException{
+	public MasterThread(ExecutorService execService, String url) throws XMLStreamException, JDOMException, IOException{
 		//assocMotPage = new HashMap<String, LinkedList<String>>();
 		assocMotPage = Collections.synchronizedMap(new HashMap<String, LinkedList<String>>());
 		//idPage = new HashMap<String, Integer>();
@@ -120,14 +130,17 @@ public class MasterThread implements PageHandler {
 		System.out.println("Loading ...");
 		
 		//dico = new Dictionnaire("https://fr.wiktionary.org/wiki/Wiktionnaire:10000-wp-fr-10000");
+		
 		/**
 		 * get words from the first wikipedia's link, for test
 		 * do not forget to set the parameter to 10 after ...
 		 */
+		this.url = url;
 		dico = new Dictionnaire(1); // 
-		execService = Executors.newFixedThreadPool(maxThreads);
-		parseDocWikiStax(url);
-		execService.shutdownNow();
+		//execService = Executors.newFixedThreadPool(maxThreads);
+		this.execService = execService;
+		
+		//execService.shutdownNow();
 		
 	}
 	
@@ -232,7 +245,6 @@ public class MasterThread implements PageHandler {
 	public Dictionnaire getDico() {
 		return dico;
 	}
-	
 	
 	
 }
