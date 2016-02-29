@@ -4,10 +4,10 @@
 	<classpathentry kind="src" path="Resource"/>
 	<classpathentry kind="src" path="dico"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="/Users/Sacko/Downloads/lib/bzip2.jar"/>
-	<classpathentry kind="lib" path="/Users/Sacko/Downloads/lib/commons-lang3-3.4.jar"/>
-	<classpathentry kind="lib" path="/Users/Sacko/Downloads/lib/jsoup-1.8.3.jar"/>
-	<classpathentry kind="lib" path="/Users/Sacko/Downloads/lib/wikixmlj-r43.jar"/>
-	<classpathentry kind="lib" path="/Users/Sacko/Downloads/jdom-2.0.6/jdom-2.0.6.jar" sourcepath="/Users/Sacko/.m2/repository/org/jdom/jdom2/2.0.6/jdom2-2.0.6-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/seydou/java/lib/commons-lang3-3.4.jar"/>
+	<classpathentry kind="lib" path="/Users/seydou/java/lib/jsoup-1.8.3.jar"/>
+	<classpathentry kind="lib" path="/Users/seydou/java/lib/jdom-2.0.6/jdom-2.0.6.jar"/>
+	<classpathentry kind="lib" path="/Users/seydou/java/lib/wikiXmlParser/wikixmlj-r43.jar"/>
+	<classpathentry kind="lib" path="/Users/seydou/java/lib/wikiXmlParser/bzip2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

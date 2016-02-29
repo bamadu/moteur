@@ -87,7 +87,7 @@ public class MasterThread implements Runnable {
 							Thread t = new Thread(new PageWorker(page, MasterThread.this));
 							t.start();
 							setNumberOfPageWorker(getNumberOfPageWorker() + 1);
-							System.out.println("[Master] PageWorker: " + getNumberOfPageWorker());
+							//System.out.println("[Master] PageWorker: " + getNumberOfPageWorker());
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -101,7 +101,6 @@ public class MasterThread implements Runnable {
 		}
 
 		System.out.println("[masterThread] pages are treating, awaiting the last thread ...");
-		this.wait();
 		System.out.println("[masterThread] creating CLI matrix ...");
 		matrice = new Matrice(C, L, I);
 		System.out.println("[masterThread] CLI matrix created.");
@@ -111,6 +110,7 @@ public class MasterThread implements Runnable {
 		System.out.println("[masterThread] creating Pk1 vector ...");
 		vecteur = new Vecteur(Matrice.MAX_SIZE, (double) (1.0 / getNbPages())); 
 		System.out.println("[masterThread] Pk1 vector created.");
+		this.wait();
 		System.out.println("[masterThread] computing pageRank ...");
 		Vecteur vectResultat = Utils.calculatePageRank(matrice, vecteur);
 		System.out.println("[masterThread] pageRank done.");
@@ -122,7 +122,12 @@ public class MasterThread implements Runnable {
 
 	public synchronized boolean canNotify() {
 		pageWorkerDone++;
-		return pageWorkerDone == getNumberOfPageWorker();
+		int i=0;
+		for(; i<10; i++) {
+			if(pageWorkerDone != getNumberOfPageWorker())
+				break;
+		}
+		return i==10 && pageWorkerDone == getNumberOfPageWorker();
 	}
 
 	public synchronized int getNumberOfPageWorker() {

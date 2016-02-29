@@ -49,8 +49,9 @@ public class PageWorker implements Runnable {
 			er.printStackTrace();
 		}
 		if (master.canNotify()) {
-			notify();
 			System.out.println("[pageWorker] last thread, Id "+Thread.currentThread().getId());
+			notify();
+			//System.out.println("[pageWorker] last thread, Id "+Thread.currentThread().getId());
 		} else {
 			System.out.println("[pageWorker] Id "+Thread.currentThread().getId());
 		}
