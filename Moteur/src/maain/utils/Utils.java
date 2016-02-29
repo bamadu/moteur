@@ -9,13 +9,12 @@ import maain.models.Matrice;
 import maain.models.Vecteur;
 
 public class Utils {
-	public static final double epsilon = 1/1000;
+	public static final double epsilon = (double) 1.0/1000.0;
 	
 	public static String[] removePunctuation(String text){
-		String[] res = (text.replaceAll("[^a-zA-Z0-9\\s]|[dl]'", " ").toLowerCase()).split("\\s+");
-		//String[] res = new String[1];
-		//res[0] = "RIEN";
-		return res;
+		return (text.replaceAll("[^a-zA-Z0-9\\s]|[dl]'", " ")
+				.toLowerCase())
+				.split("\\s+");
 	}
 	
 	public static boolean rechercheDichotomique(String word, String[] dic){
@@ -35,28 +34,8 @@ public class Utils {
 		}
 		return match;
 	}
-	
-	/*public static void main(String args[]){
-		String[] dic = new String[8];
-		String text = "H*#*#)#fhdfdfjdf[\\]~323i4i90>>>....,`344 l'''d' we+-@wqe h'heue l'homme d'academie";
-		dic[0] = "apple";
-		dic[1] = "banana";
-		dic[2] = "cherry";
-		dic[3] = "dog";
-		dic[4] = "eat";
-		dic[5] = "food";
-		dic[6] = "good";
-		dic[7] = "hotel";
-		
-		String tab[] = Clean.removePunctuation(text);
-		for(String s:tab)
-			System.out.println(s);
-		
-		//Clean.checkDictionnary("hotel",dic);
-	}*/
 
 	public static boolean recherche(String word, String[] wordList) {
-		// TODO Auto-generated method stub
 		for(int i=0; i < wordList.length; i++){
 			if(word.equalsIgnoreCase(wordList[i]))
 				return true;
@@ -72,7 +51,6 @@ public class Utils {
 	}
 	
 	public static boolean recherche(String word, Collection<String> wordList) {
-		// TODO Auto-generated method stub
 		for (String w: wordList) 
 			if(word.equalsIgnoreCase(w))
 					return true;
@@ -102,18 +80,10 @@ public class Utils {
 	}
 	
 	private static double norme(Vecteur pk, Vecteur po) {
-		// TODO Auto-generated method stub
 		double res = 0;
-		for(int i = 0; i < pk.getSize(); i++){
+		for(int i = 0; i < pk.getSize(); i++)
 			res += Math.abs(pk.getValue(i) - po.getValue(i));
-		}
 		return res;
 	}
-
-	
-	
-	
-	
-	
 	
 }

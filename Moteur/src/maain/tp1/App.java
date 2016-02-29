@@ -1,29 +1,23 @@
 package maain.tp1;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
 import javax.xml.stream.XMLStreamException;
-
 import org.jdom2.JDOMException;
+
 
 public class App {
 	
 	//private static final String path = "test.xml";
-	private static final String path = "/Users/Sacko/Documents/Master/Master_2/Semestre_2/MAIN/MesTPS/frwiki.xml";
-
+	private static final String path = "/Users/seydou/m2-lp/maain-m2/frwiki.xml";
 	
-	public static void main(String[] args) throws XMLStreamException, JDOMException, IOException {
+	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		//App app = new App();
 		long startTime = System.nanoTime();
 		//String deb = Utils.displayDate();
-		int maxThreads = 2;
-		ExecutorService execService = Executors.newFixedThreadPool(maxThreads);
 		 try {
-			 MasterThread parse = new MasterThread (execService, path);
+			 MasterThread parse = new MasterThread (path);
 			 
 			 Thread moulinette = new Thread(parse);
 			 moulinette.start();

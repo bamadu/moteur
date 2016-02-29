@@ -26,52 +26,34 @@ public class PageWorker implements Runnable {
 
 		try {
 			//System.out.println("Start -> Worker "+Thread.currentThread().getId()+" currentTotal "+Thread.activeCount());
-			/* $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ */
-			//int ind1 = 0; //
-			///int id_page = 0; //
-			int curPageId = 0;
-			//int flag = 0; // 
-			//int flagDeb = 0; //
-			//String tmpTitle;
-
-			Vector<String> tmpLinks;
-
-			//curPageId = master.getId_page();
-			//tmpTitle = page.getTitle().toLowerCase();
-			curPageId = master.updateIdPage(page.getTitle().toLowerCase());
-
-			/**
-			 * Prendre en compte la casse des titres
-			 */
-			tmpLinks = page.getLinks();
-
+						  
+			 /* Prendre en compte la casse des titres */
+			Vector<String> tmpLinks = page.getLinks();
+			//int curPageId = master.updateIdPage(page.getTitle().toLowerCase());
+			
 			for(String links : tmpLinks){
 				links = links.toLowerCase();// casse minuscule
 				master.updateIdPage(links);
-				// C[flag] = (double) (1.0 / (double)tmpLinks.size()); 
-				//I[flag++] = idPage.get(links); 
-				//master.getC()[master.flag] = (double) (1.0 / (double)tmpLinks.size());
-				//master.getI()[master.flag++] = master.getIdPage().get(links);
 				master.setCandIParameters(links, tmpLinks.size());
 			}
 
-			//			master.getL()[master.ind1] = master.flagDeb ;
-			//			master.getL()[master.ind1+1] = master.flag ;
-			//			master.ind1++;
-			//			master.flagDeb = master.flag ;
 			master.setLParameters();
 			/* association mot page (à revoir) */
 			fillMotPageRelation(Utils.removePunctuation(page.getWikiText()), page.getTitle().toLowerCase(), master.getAssocMotPage());
-			master.getIdLinks().put(curPageId, tmpLinks);
 			//System.out.println("END OF : "+ Thread.currentThread().getId()+" title Page: "+page.getTitle().toLowerCase());
-			System.out.println(master.nbPages);
+			//System.out.println(master.getNbPages());
 
 		} 
 		catch(java.lang.OutOfMemoryError er) {
-			System.out.println("Worker "+Thread.currentThread().getId());
+			System.out.println("[pageWorker] "+Thread.currentThread().getId());
 			er.printStackTrace();
 		}
-		System.gc();
+		if (master.canNotify()) {
+			notify();
+			System.out.println("[pageWorker] last thread, Id "+Thread.currentThread().getId());
+		} else {
+			System.out.println("[pageWorker] Id "+Thread.currentThread().getId());
+		}
 		//System.out.println("End   -> Worker "+Thread.currentThread().getId()+" currentTotal "+Thread.activeCount());
 	}
 
@@ -81,8 +63,7 @@ public class PageWorker implements Runnable {
 	 * @param map relation mot page
 	 * 
 	 */
-	private void fillMotPageRelation(String pageWords[], String titre, Map<String, LinkedList<String>> map){
-		//String pageWords[] = Clean.removePunctuation(page.getContenu());
+	private void fillMotPageRelation(String pageWords[], String titre, Map<String, LinkedList<String>> map) {
 		/*
 		 * Pour chaque mot de la page
 		 * on verifie s'il existe dans le dictionnaire
