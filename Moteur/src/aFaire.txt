@@ -18,3 +18,5 @@ $ 4. jsoup-1.8.3.jar
 $ 5.wikixmlj-r43.jar
 ************************************************************
 links : differencier Liens externes de liens internes dans le fichier XML
+********************************************************
+Permet d'augmenter la taille de la JVM : -Xms2024M -Xmx6192M -XX:MaxPermSize=512m

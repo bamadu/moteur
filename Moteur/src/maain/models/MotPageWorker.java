@@ -25,26 +25,28 @@ public class MotPageWorker implements Runnable {
 		mapWordPage = _mapWordPage;
 		this.url = url;
 	}
-	
+	int nbPages = 0;
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		WikiXMLParser wxsp = WikiXMLParserFactory.getSAXParser(url);
-
+		 
 		try {
 			wxsp.setPageCallback(new PageCallbackHandler() {
 
-				public void process(WikiPage page) {
+				public void process(final WikiPage page) {
 
 					if (!page.isRedirect() && !page.isSpecialPage() && !page.isStub()) {
-						String pageWords[] = Utils.removePunctuation(page.getWikiText());
+						final String pageWords[] = Utils.removePunctuation(page.getWikiText());
 						/*
 						 * Pour chaque mot de la page
 						 * on verifie s'il existe dans le dictionnaire
 						 * algo de recherche dichotomique 
 						 */
+						System.out.println(++nbPages);
+						final String tmpTab[] = dico.getSortDataFinal().toArray(new String[0]);
 						for(String word : pageWords){
-							if( Utils.recherche(word, dico.getSortDataFinal())){
+							if( Utils.rechercheDichotomique(word, tmpTab)){
 								if(mapWordPage.get(word) == null){// 
 									mapWordPage.put(word, new LinkedList<String>());
 								}
@@ -53,11 +55,13 @@ public class MotPageWorker implements Runnable {
 								}
 							}
 						}
+						
 
 					}
 				}
 			});
 			wxsp.parse();
+			Serialisation.save(mapWordPage, "motpage.ser");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -65,12 +69,17 @@ public class MotPageWorker implements Runnable {
 	public static void main(String[] args) {
 		long startTime = System.nanoTime();
 		Map<String, LinkedList<String>> m = new HashMap<String, LinkedList<String>>();
-		new Thread(new MotPageWorker(App.path, new Dictionnaire(10), m))
-			.start();
+		Thread t = new Thread(new MotPageWorker(App.path, new Dictionnaire(10), m));
+		t.start();
+		try {
+			t.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		Serialisation.save(m, "motpage.ser");
-		 long endTime = System.nanoTime();
-	     long elapsedTimeInMillis = TimeUnit.SECONDS.convert((endTime - startTime), TimeUnit.NANOSECONDS);
-	     System.out.println("Total elapsed time: " + elapsedTimeInMillis + " s");
+		long endTime = System.nanoTime();
+	    long elapsedTimeInMillis = TimeUnit.SECONDS.convert((endTime - startTime), TimeUnit.NANOSECONDS);
+	    System.out.println("Total elapsed time: " + elapsedTimeInMillis + " s");
 	}
 }
