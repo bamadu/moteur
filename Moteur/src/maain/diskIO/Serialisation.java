@@ -8,11 +8,11 @@ import java.io.ObjectOutputStream;
 
 public class Serialisation {
 
-	public static <T> void save(T serObject) {
+	public static <T> void save(T serObject, String filename) {
 		ObjectOutputStream oos = null;
 		System.out.println("[Serial] serialisation ...");
 		try {
-			final FileOutputStream fichier = new FileOutputStream("cli.ser");
+			final FileOutputStream fichier = new FileOutputStream(filename);
 			oos = new ObjectOutputStream(fichier);
 			oos.writeObject(serObject);
 			oos.flush();
