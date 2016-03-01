@@ -3,6 +3,7 @@ package maain.utils;
 import java.text.DateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import maain.models.Matrice;
@@ -43,6 +44,12 @@ public class Utils {
 		return false;
 	}
 	
+	public static boolean recherche(String word, HashMap<String, Boolean> wordMapList) {
+		
+		return (wordMapList.get(word) != null) && wordMapList.get(word) == true;
+	}
+	
+	
 	public static boolean recherche(String word, List<String> wordList) {
 		for (String w: wordList) 
 			if(word.equalsIgnoreCase(w))
@@ -56,6 +63,11 @@ public class Utils {
 					return true;
 		return false;
 	}
+	
+	
+	
+	
+	
 	
 	public static String displayDate(){
 		Date aujourdhui = new Date();

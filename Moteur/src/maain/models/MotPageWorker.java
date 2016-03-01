@@ -44,9 +44,9 @@ public class MotPageWorker implements Runnable {
 						 * algo de recherche dichotomique 
 						 */
 						System.out.println(++nbPages);
-						final String tmpTab[] = dico.getSortDataFinal().toArray(new String[0]);
+						//final String tmpTab[] = dico.getSortDataFinal().toArray(new String[0]);
 						for(String word : pageWords){
-							if( Utils.rechercheDichotomique(word, tmpTab)){
+							if( Utils.recherche(word, dico.getHmapDico())){
 								if(mapWordPage.get(word) == null){// 
 									mapWordPage.put(word, new LinkedList<String>());
 								}
