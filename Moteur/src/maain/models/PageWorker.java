@@ -41,7 +41,7 @@ public class PageWorker implements Runnable {
 			/* association mot page (à revoir) */
 			fillMotPageRelation(Utils.removePunctuation(page.getWikiText()), page.getTitle().toLowerCase(), master.getAssocMotPage());
 			//System.out.println("END OF : "+ Thread.currentThread().getId()+" title Page: "+page.getTitle().toLowerCase());
-			//System.out.println(master.getNbPages());
+			System.out.println(master.getNbPages());
 
 		} 
 		catch(java.lang.OutOfMemoryError er) {
