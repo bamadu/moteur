@@ -5,17 +5,18 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
+import maain.diskIO.DiskIO;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import maain.diskIO.DiskIO;
 
 public class Dictionnaire 
 {
@@ -28,6 +29,14 @@ public class Dictionnaire
     
     private DiskIO out;
     private int maxLinks;
+    private HashMap<String, Boolean> hmapDico;
+    
+    /**
+     * @return
+     */
+    public HashMap<String, Boolean> getHmapDico(){
+    	return hmapDico;
+    }
     
     public Dictionnaire(int _maxLinks) {
     	this(DEFAULT_URL, DEFAULT_PATTERN, _maxLinks);
@@ -39,6 +48,7 @@ public class Dictionnaire
     	wikiLinksPattern = pattern;
     	out = new DiskIO();
     	try {
+    		hmapDico = new HashMap<String, Boolean> ();
 			sortDataFinal = getWordsFromLinks();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -71,6 +81,7 @@ public class Dictionnaire
     	links = links.subList(0, maxLinks);
     	for (String link : links) {
     		words.addAll(getWordsFromLink(link));
+    		hmapDico.put(link, true);
     	}
     	Collections.sort(words);
     	List<String> stopWords = out.getDataFromFile("mots_vides");
