@@ -1,6 +1,12 @@
 package maain.models;
 
-public class Vecteur {
+import java.io.Serializable;
+
+public class Vecteur implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	double tab[];
 	int size;
 	public Vecteur(int n){

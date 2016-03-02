@@ -6,9 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +21,19 @@ public class DiskIO {
 	public final static String RESOURCE_DIR = "Resource/dico/";
 	protected int ioNumber=0;
 	private boolean debug = true;
+	
+	
+	public static void writeToFile(Map<?,?> map, String path) throws IOException{
+		File file = new File (path);
+		Writer writer = new BufferedWriter(new OutputStreamWriter(
+	              new FileOutputStream(file), "utf-8"));
+		for(Object str : map.keySet()){
+			writer.write((String)str + " : "+ map.get(str).toString()+"\n" );
+		}
+	}
+	
+	
+	
 	
 	public void writeToFile(List<String> words, String path) {
 		path = getFilename (path);

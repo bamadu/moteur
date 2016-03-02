@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Vector;
 
 import javax.xml.stream.XMLStreamException;
 
+import maain.diskIO.DiskIO;
 import maain.diskIO.Serialisation;
 import maain.models.Dictionnaire;
 import maain.models.Matrice;
@@ -45,8 +45,7 @@ public class MasterThread implements Runnable {
 	public MasterThread(String url) throws XMLStreamException, JDOMException,
 			IOException {
 
-		assocMotPage = Collections
-				.synchronizedMap(new HashMap<String, LinkedHashSet<String>>());
+		assocMotPage = Collections.synchronizedMap(new HashMap<String, LinkedHashSet<String>>());
 		idPage = Collections.synchronizedMap(new HashMap<String, Integer>());
 		// assocMotPage = new HashMap<String, LinkedList<String>>();
 		// idPage = new HashMap<String, Integer>();
@@ -83,7 +82,7 @@ public class MasterThread implements Runnable {
 					try {
 						if (!page.isRedirect() && !page.isSpecialPage() && !page.isStub()) {
 							final String pageWords[] = Utils.removePunctuation(page.getWikiText());
-							System.out.println(++nbPages);
+							//System.out.println(++nbPages);
 							for (String word : pageWords) {
 								if (Utils.recherche(word, dico.getHmapDico())) {
 									if (assocMotPage.get(word) == null) 
@@ -92,7 +91,6 @@ public class MasterThread implements Runnable {
 										assocMotPage.get(word).add(page.getTitle());
 								}
 							}
-							
 							Vector<String> tmpLinks = page.getLinks();
 							for(String links : tmpLinks){
 								links = links.toLowerCase();// casse minuscule
@@ -112,11 +110,17 @@ public class MasterThread implements Runnable {
 				}
 			});
 			wxsp.parse();
-			//System.out.println("Voila : "+"taille = "+assocMotPage.size()+"contenu"+assocMotPage.get("autant"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		try {
+			System.out.println("Ecriture dans le fichier Log de la relation mot page");
+			DiskIO.writeToFile(assocMotPage, "mot_page_relation.log");
+			System.out.println("Fin de l'écriture");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("[masterThread] pages are treating, awaiting the last thread ...");
 		System.out.println("[masterThread] creating CLI matrix ...");
 		matrice = new Matrice(C, L, I);
