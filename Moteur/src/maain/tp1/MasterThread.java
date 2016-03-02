@@ -3,6 +3,7 @@ package maain.tp1;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Vector;
@@ -25,7 +26,7 @@ import edu.jhu.nlp.wikipedia.WikiXMLParserFactory;
 public class MasterThread implements Runnable {
 
 	private static Dictionnaire dico;
-	private static Map<String, LinkedList<String>> assocMotPage;
+	private static Map<String, LinkedHashSet<String>> assocMotPage;
 	private static Map<String, Integer> idPage;
 	private static Vecteur vecteur;
 	private Matrice matrice;
@@ -45,7 +46,7 @@ public class MasterThread implements Runnable {
 			IOException {
 
 		assocMotPage = Collections
-				.synchronizedMap(new HashMap<String, LinkedList<String>>());
+				.synchronizedMap(new HashMap<String, LinkedHashSet<String>>());
 		idPage = Collections.synchronizedMap(new HashMap<String, Integer>());
 		// assocMotPage = new HashMap<String, LinkedList<String>>();
 		// idPage = new HashMap<String, Integer>();
@@ -86,7 +87,7 @@ public class MasterThread implements Runnable {
 							for (String word : pageWords) {
 								if (Utils.recherche(word, dico.getHmapDico())) {
 									if (assocMotPage.get(word) == null) 
-										assocMotPage.put(word, new LinkedList<String>());
+										assocMotPage.put(word, new LinkedHashSet<String>());
 									else
 										assocMotPage.get(word).add(page.getTitle());
 								}
@@ -111,10 +112,11 @@ public class MasterThread implements Runnable {
 				}
 			});
 			wxsp.parse();
+			//System.out.println("Voila : "+"taille = "+assocMotPage.size()+"contenu"+assocMotPage.get("autant"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
 		System.out.println("[masterThread] pages are treating, awaiting the last thread ...");
 		System.out.println("[masterThread] creating CLI matrix ...");
 		matrice = new Matrice(C, L, I);
@@ -152,7 +154,7 @@ public class MasterThread implements Runnable {
 		this.numberOfPageWorker = numberOfPageWorker;
 	}
 
-	public Map<String, LinkedList<String>> getAssocMotPage() {
+	public Map<String, LinkedHashSet<String>> getAssocMotPage() {
 		// TODO Auto-generated method stub
 		return assocMotPage;
 	}

@@ -10,7 +10,7 @@ import org.jdom2.JDOMException;
 
 public class App {
 	
-	//public static final String path = "xab.xml";
+	//public static final String path = "test.xml";
 	//public static final String path = "/Users/seydou/m2-lp/maain-m2/frwiki.xml";
 	public static final String path = "/Users/Sacko/Documents/Master/Master_2/Semestre_2/MAIN/MesTPS/frwiki.xml";
 	
