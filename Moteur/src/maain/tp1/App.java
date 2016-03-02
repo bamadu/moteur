@@ -2,7 +2,9 @@ package maain.tp1;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+
 import javax.xml.stream.XMLStreamException;
+
 import org.jdom2.JDOMException;
 
 
@@ -18,7 +20,11 @@ public class App {
 		long startTime = System.nanoTime();
 		//String deb = Utils.displayDate();
 		 try {
+			 
 			 MasterThread parse = new MasterThread (path);
+			 /*Thread tCliWorker = new Thread(new CLIWorker(parse));
+			 tCliWorker.start();
+			 tCliWorker.join();*/
 			 
 			 Thread moulinette = new Thread(parse);
 			 moulinette.start();

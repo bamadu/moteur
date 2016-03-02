@@ -5,21 +5,22 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.xml.stream.XMLStreamException;
- 
+
+import maain.diskIO.Serialisation;
+import maain.models.Dictionnaire;
+import maain.models.Matrice;
+import maain.models.Vecteur;
+import maain.utils.Utils;
+
 import org.jdom2.JDOMException;
 
 import edu.jhu.nlp.wikipedia.PageCallbackHandler;
 import edu.jhu.nlp.wikipedia.WikiPage;
 import edu.jhu.nlp.wikipedia.WikiXMLParser;
 import edu.jhu.nlp.wikipedia.WikiXMLParserFactory;
-import maain.diskIO.Serialisation;
-import maain.models.Dictionnaire;
-import maain.models.Matrice;
-import maain.models.PageWorker;
-import maain.models.Vecteur;
-import maain.utils.Utils;
 
 public class MasterThread implements Runnable {
 
@@ -40,10 +41,14 @@ public class MasterThread implements Runnable {
 	public int ind1 = 0; //
 	private String url;
 
-	public MasterThread(String url) throws XMLStreamException, JDOMException, IOException {
-		
-		assocMotPage = Collections.synchronizedMap(new HashMap<String, LinkedList<String>>());
+	public MasterThread(String url) throws XMLStreamException, JDOMException,
+			IOException {
+
+		assocMotPage = Collections
+				.synchronizedMap(new HashMap<String, LinkedList<String>>());
 		idPage = Collections.synchronizedMap(new HashMap<String, Integer>());
+		// assocMotPage = new HashMap<String, LinkedList<String>>();
+		// idPage = new HashMap<String, Integer>();
 		System.out.println("[masterThread] Loading dictionnaire for wiki ...");
 
 		/**
@@ -56,7 +61,6 @@ public class MasterThread implements Runnable {
 
 	}
 
-	
 	@Override
 	public void run() {
 		try {
@@ -75,23 +79,34 @@ public class MasterThread implements Runnable {
 			wxsp.setPageCallback(new PageCallbackHandler() {
 
 				public void process(WikiPage page) {
-
-					if (!page.isRedirect() && !page.isSpecialPage() && !page.isStub()) {
-
-						try {
-							/*
-							 * lancer un PageWorker pour traiter la page en
-							 * cours
-							 */
-							setNbPages(getNbPages() + 1);
-							Thread t = new Thread(new PageWorker(page, MasterThread.this));
-							t.start();
-							setNumberOfPageWorker(getNumberOfPageWorker() + 1);
-							//System.out.println("[Master] PageWorker: " + getNumberOfPageWorker());
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+					try {
+						if (!page.isRedirect() && !page.isSpecialPage() && !page.isStub()) {
+							final String pageWords[] = Utils.removePunctuation(page.getWikiText());
+							System.out.println(++nbPages);
+							for (String word : pageWords) {
+								if (Utils.recherche(word, dico.getHmapDico())) {
+									if (assocMotPage.get(word) == null) 
+										assocMotPage.put(word, new LinkedList<String>());
+									else
+										assocMotPage.get(word).add(page.getTitle());
+								}
+							}
+							
+							Vector<String> tmpLinks = page.getLinks();
+							for(String links : tmpLinks){
+								links = links.toLowerCase();// casse minuscule
+								updateIdPage(links);
+								// mise à jour des tableaux C et I
+								setCandIParameters(links, tmpLinks.size());
+							}
+							// mise à jour du tableau L contenant les lignes
+							setLParameters();
 						}
+					}
+
+					catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 			});
@@ -108,26 +123,25 @@ public class MasterThread implements Runnable {
 		 * Ici commencer le produit
 		 */
 		System.out.println("[masterThread] creating Pk1 vector ...");
-		vecteur = new Vecteur(Matrice.MAX_SIZE, (double) (1.0 / getNbPages())); 
+		vecteur = new Vecteur(Matrice.MAX_SIZE, (double) (1.0 / getNbPages()));
 		System.out.println("[masterThread] Pk1 vector created.");
-		this.wait();
 		System.out.println("[masterThread] computing pageRank ...");
 		Vecteur vectResultat = Utils.calculatePageRank(matrice, vecteur);
 		System.out.println("[masterThread] pageRank done.");
-		Serialisation.save(vectResultat,"cli.ser");
+		Serialisation.save(vectResultat, "cli.ser");
 		System.out.println("[masterThread] pageRank saved.");
-		Vecteur.displayVector(vectResultat, getNbPages());
+		//Vecteur.displayVector(vectResultat, getNbPages());
 
 	}
 
 	public synchronized boolean canNotify() {
 		pageWorkerDone++;
-		int i=0;
-		for(; i<10; i++) {
-			if(pageWorkerDone != getNumberOfPageWorker())
+		int i = 0;
+		for (; i < 10; i++) {
+			if (pageWorkerDone != getNumberOfPageWorker())
 				break;
 		}
-		return i==10 && pageWorkerDone == getNumberOfPageWorker();
+		return i == 10 && pageWorkerDone == getNumberOfPageWorker();
 	}
 
 	public synchronized int getNumberOfPageWorker() {
@@ -162,7 +176,7 @@ public class MasterThread implements Runnable {
 
 	public synchronized int updateIdPage(String title) {
 		int curPageId;
-		boolean res = idPage.values().contains(title);
+		boolean res = idPage.get(title) != null;
 		if (!res) {
 			curPageId = getId_page();
 			idPage.put(title, curPageId);
@@ -183,7 +197,7 @@ public class MasterThread implements Runnable {
 	public synchronized void setNbPages(int nbPages) {
 		this.nbPages = nbPages;
 	}
-	
+
 	public double[] getC() {
 		return C;
 	}

@@ -6,7 +6,7 @@ public class Matrice {
 	private double mC[];
 	private int mL[];
 	private int mI[];
-	public static int MAX_SIZE = 15000000;
+	public static int MAX_SIZE = 150000000;
 	
 	public Matrice(int size, int nb){
 		this.size = size;
