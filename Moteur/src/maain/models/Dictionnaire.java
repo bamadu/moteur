@@ -91,7 +91,9 @@ public class Dictionnaire
     	out.writeToFile(filterWordsByLength(words, 2), "stopWords");
     	//System.out.println("Size[stop]: "+stopWords.size()+"\nSize[words]: "+i1+" --> "+i2+" dif: "+(i1-i2));
     	out.writeToFile(words, "words");
-    	
+    	for(String s:words){
+    		hmapDico.put(s, true);
+    	}
     	return words;
     }
     
@@ -104,7 +106,6 @@ public class Dictionnaire
         	String strClean = StringUtils.trim(Normalizer
                     .normalize(str.toLowerCase(), Normalizer.Form.NFD)
                     .replaceAll("[^\\p{ASCII}]", ""));
-        	hmapDico.put(strClean, true);
         	words.add(strClean
                     //.replaceAll("\\w'", "")
                     );
@@ -179,5 +180,8 @@ public class Dictionnaire
 	public void setSortDataFinal(List<String> sortDataFinal) {
 		this.sortDataFinal = sortDataFinal;
 	}*/
+    public static void main(String[] args) {
+		new Dictionnaire(10);
+	}
 
 }
