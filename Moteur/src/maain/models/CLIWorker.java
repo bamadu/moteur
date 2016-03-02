@@ -91,7 +91,7 @@ public class CLIWorker implements Runnable {
 		System.out.println("[MotPageWorker] creating CLI matrix ...");
 		matrice = new Matrice(C, L, I);
 		System.out.println("[MotPageWorker] CLI matrix created.");
-		Serialisation.save(matrice);
+		Serialisation.save(matrice, "cliMatrix.ser");
 		System.out.println("[MotPageWorker] CLI matrix saved.");
 		/**
 		 * Ici commencer le produit
@@ -103,7 +103,7 @@ public class CLIWorker implements Runnable {
 		System.out.println("[MotPageWorker] computing pageRank ...");
 		Vecteur vectResultat = Utils.calculatePageRank(matrice, vecteur);
 		System.out.println("[MotPageWorker] pageRank done.");
-		Serialisation.save(vectResultat);
+		Serialisation.save(vectResultat,"pageRank.ser");
 		System.out.println("[MotPageWorker] pageRank saved.");
 		Vecteur.displayVector(vectResultat, nbTreatPages);
 	}

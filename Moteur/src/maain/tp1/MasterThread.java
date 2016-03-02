@@ -114,7 +114,7 @@ public class MasterThread implements Runnable {
 		System.out.println("[masterThread] computing pageRank ...");
 		Vecteur vectResultat = Utils.calculatePageRank(matrice, vecteur);
 		System.out.println("[masterThread] pageRank done.");
-		Serialisation.save(vectResultat);
+		Serialisation.save(vectResultat,"cli.ser");
 		System.out.println("[masterThread] pageRank saved.");
 		Vecteur.displayVector(vectResultat, getNbPages());
 

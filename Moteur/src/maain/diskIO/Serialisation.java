@@ -8,11 +8,11 @@ import java.io.ObjectOutputStream;
 
 public class Serialisation {
 
-	public static <T> void save(T serObject) {
+	public static <T> void save(T serObject, String filename) {
 		ObjectOutputStream oos = null;
 		System.out.println("[Serial] serialisation ...");
 		try {
-			final FileOutputStream fichier = new FileOutputStream("cli.ser");
+			final FileOutputStream fichier = new FileOutputStream(filename);
 			oos = new ObjectOutputStream(fichier);
 			oos.writeObject(serObject);
 			oos.flush();
@@ -32,13 +32,13 @@ public class Serialisation {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T loadCLI() {
+	public static <T> T load(String filename) {
 
 		System.out.println("[Serial] chargement ...");
 		ObjectInputStream ois = null;
 		T serObject = null;
 		try {
-			final FileInputStream fichier = new FileInputStream("personne.ser");
+			final FileInputStream fichier = new FileInputStream(filename);
 			ois = new ObjectInputStream(fichier);
 			serObject = (T) ois.readObject();
 		} catch (final IOException e) {

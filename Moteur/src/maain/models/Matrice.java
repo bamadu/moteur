@@ -1,6 +1,12 @@
 package maain.models;
 
-public class Matrice {
+import java.io.Serializable;
+
+public class Matrice implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int m;
 	private int size;
 	private double mC[];
@@ -21,18 +27,23 @@ public class Matrice {
 		this.mI = mI;
 		this.mL = mL;
 	}
+	
 	public double[] getMC() {
-		// TODO Auto-generated method stub
 		return mC;
 	}
 
 	public int[] getML() {
-		// TODO Auto-generated method stub
 		return mL;
 	}
 
 	public int[] getMI() {
-		// TODO Auto-generated method stub
 		return mI;
+	}
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
 	}
 }
