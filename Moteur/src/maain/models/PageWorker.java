@@ -1,6 +1,7 @@
 package maain.models;
 
 
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Vector;
@@ -64,7 +65,7 @@ public class PageWorker implements Runnable {
 	 * @param map relation mot page
 	 * 
 	 */
-	private void fillMotPageRelation(String pageWords[], String titre, Map<String, LinkedList<String>> map) {
+	private void fillMotPageRelation(String pageWords[], String titre, Map<String, LinkedHashSet<String>>  map) {
 		/*
 		 * Pour chaque mot de la page
 		 * on verifie s'il existe dans le dictionnaire
@@ -73,7 +74,7 @@ public class PageWorker implements Runnable {
 		for(String word : pageWords){
 			if( Utils.recherche(word, master.getDico().getSortDataFinal())){
 				if(map.get(word) == null){// 
-					map.put(word, new LinkedList<String>());
+					map.put(word, new LinkedHashSet<String>());
 				}
 				else{
 					map.get(word).add(titre);

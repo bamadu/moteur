@@ -2,7 +2,9 @@ package maain.tp1;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+
 import javax.xml.stream.XMLStreamException;
+ 
 import org.jdom2.JDOMException;
 
 
@@ -11,14 +13,18 @@ public class App {
 	//private static final String path = "test.xml";
 	public static final String path = "/Users/seydou/m2-lp/maain-m2/frwiki.xml";
 	//private static final String path = "/Users/Sacko/Documents/Master/Master_2/Semestre_2/MAIN/MesTPS/frwiki.xml";
-	
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		//App app = new App();
 		long startTime = System.nanoTime();
 		//String deb = Utils.displayDate();
 		 try {
+			 
 			 MasterThread parse = new MasterThread (path);
+			 /*Thread tCliWorker = new Thread(new CLIWorker(parse));
+			 tCliWorker.start();
+			 tCliWorker.join();*/
 			 
 			 Thread moulinette = new Thread(parse);
 			 moulinette.start();

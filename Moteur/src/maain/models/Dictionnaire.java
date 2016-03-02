@@ -81,7 +81,6 @@ public class Dictionnaire
     	links = links.subList(0, maxLinks);
     	for (String link : links) {
     		words.addAll(getWordsFromLink(link));
-    		hmapDico.put(link, true);
     	}
     	Collections.sort(words);
     	List<String> stopWords = out.getDataFromFile("mots_vides");
@@ -102,12 +101,13 @@ public class Dictionnaire
         Elements ul = Jsoup.connect(link).get().select("div#mw-content-text > ul > li > a[href]");
         for (Element el: ul) {
         	String str = wordWithoutApos(el.text());
-        	words.add(StringUtils.trim(Normalizer
+        	String strClean = StringUtils.trim(Normalizer
                     .normalize(str.toLowerCase(), Normalizer.Form.NFD)
-                    .replaceAll("[^\\p{ASCII}]", "")
+                    .replaceAll("[^\\p{ASCII}]", ""));
+        	hmapDico.put(strClean, true);
+        	words.add(strClean
                     //.replaceAll("\\w'", "")
-                    )
-        	);
+                    );
         }
         //Collections.sort(words);
         

@@ -64,10 +64,7 @@ public class Utils {
 		return false;
 	}
 	
-	
-	
-	
-	
+		
 	
 	public static String displayDate(){
 		Date aujourdhui = new Date();
