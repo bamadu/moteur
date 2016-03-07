@@ -32,13 +32,13 @@ public class Serialisation {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T load(String filename) {
+	public static <T> T loadCLI() {
 
 		System.out.println("[Serial] chargement ...");
 		ObjectInputStream ois = null;
 		T serObject = null;
 		try {
-			final FileInputStream fichier = new FileInputStream(filename);
+			final FileInputStream fichier = new FileInputStream("personne.ser");
 			ois = new ObjectInputStream(fichier);
 			serObject = (T) ois.readObject();
 		} catch (final IOException e) {

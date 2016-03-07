@@ -1,17 +1,18 @@
 package maain.diskIO;
-
+ 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+
+import maain.tp1.MasterThread;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,8 +28,14 @@ public class DiskIO {
 		File file = new File (path);
 		Writer writer = new BufferedWriter(new OutputStreamWriter(
 	              new FileOutputStream(file), "utf-8"));
+		double pageRank = 0.0;
+		Integer num;
 		for(Object str : map.keySet()){
-			writer.write((String)str + " : "+ map.get(str).toString()+"\n" );
+			num = MasterThread.getIdPage().get(str);
+			if( num != null){
+				pageRank = MasterThread.getVecteur().getTab()[num];
+				writer.write((String)str + " ( pageRank: "+pageRank+") : "+ map.get(str).toString()+"\n" );
+			}
 		}
 		writer.close();
 	}

@@ -92,12 +92,12 @@ public class MasterThread implements Runnable {
 									if (assocMotPage.get(word) == null) {
 										assocMotPage.put(word, new LinkedList<String>());
 										doublon.put(word, true);
-										assocMotPageRank.put(word, new LinkedList<Page>());
+										//assocMotPageRank.put(word, new LinkedList<Page>());
 									}
 									else if(doublon.get(word) == null){
 										assocMotPage.get(word).add(title);
 										doublon.put(word, true);
-										assocMotPageRank.get(word).add(new Page(title));
+										//assocMotPageRank.get(word).add(new Page(title));
 									}
 								}
 							}
@@ -143,7 +143,7 @@ public class MasterThread implements Runnable {
 		try {
 			System.out.println("Ecriture dans le fichier Log de la relation mot page");
 			DiskIO.writeToFile(assocMotPage, "mot_page_relation.log");
-			DiskIO.writeToFile(assocMotPageRank, "mot_page_relation_trie.log");
+			//DiskIO.writeToFile(assocMotPageRank, "mot_page_relation_trie.log");
 			System.out.println("Fin de l'écriture");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
