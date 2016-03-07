@@ -17,8 +17,8 @@ public class Page implements Comparable<Page>{
 		// TODO Auto-generated method stub
 		double p1 = MasterThread.getVecteur().getTab()[MasterThread.getIdPage().get(this.titre)];
 		double p2 = MasterThread.getVecteur().getTab()[MasterThread.getIdPage().get(o.titre)];
-		if(p1 < p2) return -1;
-		if(p1 > p2) return 1;
+		if(p1 < p2) return 1;
+		if(p1 > p2) return -1;
 		return 0;
 	}
 

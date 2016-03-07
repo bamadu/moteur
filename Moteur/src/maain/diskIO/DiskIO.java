@@ -30,6 +30,7 @@ public class DiskIO {
 		for(Object str : map.keySet()){
 			writer.write((String)str + " : "+ map.get(str).toString()+"\n" );
 		}
+		writer.close();
 	}
 	
 	
